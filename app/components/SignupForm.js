@@ -17,6 +17,11 @@ const validationSchema = Yup.object({
     .trim()
     .min(3, 'Invalid name!')
     .required('Name is required!'),
+  money: Yup.string()
+    .trim()
+    .min(3, 'Invalid money balance!')
+    .required('Money balance is required!'),
+    
   email: Yup.string().email('Invalid email!').required('Email is required!'),
   password: Yup.string()
     .trim()
@@ -31,6 +36,7 @@ const validationSchema = Yup.object({
 const SignupForm = ({ navigation }) => {
   const userInfo = {
     fullname: '',
+    money: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -38,7 +44,7 @@ const SignupForm = ({ navigation }) => {
 
   const [error, setError] = useState('');
 
-  const { fullname, email, password, confirmPassword } = userInfo;
+  const { fullname, money, email, password, confirmPassword } = userInfo;
 
   const handleOnChangeText = (value, fieldName) => {
     setUserInfo({ ...userInfo, [fieldName]: value });
@@ -51,6 +57,8 @@ const SignupForm = ({ navigation }) => {
     // if valid name with 3 or more characters
     if (!fullname.trim() || fullname.length < 3)
       return updateError('Invalid name!', setError);
+    if (!money.trim() || money.length < 3)
+      return updateError('Invalid money balance!', setError);  
     // only valid email id is allowed
     if (!isValidEmail(email)) return updateError('Invalid email!', setError);
     // password must have 8 or more characters
@@ -109,7 +117,7 @@ const SignupForm = ({ navigation }) => {
           handleBlur,
           handleSubmit,
         }) => {
-          const { fullname, email, password, confirmPassword } = values;
+          const { fullname, money, email, password, confirmPassword } = values;
           return (
             <>
               <FormInput
@@ -119,6 +127,14 @@ const SignupForm = ({ navigation }) => {
                 onBlur={handleBlur('fullname')}
                 label='Full Name'
                 placeholder='John Smith'
+              />
+              <FormInput
+                value={money}
+                error={touched.money && errors.money}
+                onChangeText={handleChange('money')}
+                onBlur={handleBlur('money')}
+                label='money on balance'
+                placeholder='10000'
               />
               <FormInput
                 value={email}
